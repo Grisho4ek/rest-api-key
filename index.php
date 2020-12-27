@@ -26,7 +26,7 @@ function check_key(array $result, \WP_REST_Server $server, \WP_Rest_Request $req
   if ($request->get_header('x-api-key') != $_ENV['API_KEY']) {
     return [
       'succes'  => false,
-      'message' => __('bie'),
+      'message' => __('Permission denied'),
     ];
   }
 
