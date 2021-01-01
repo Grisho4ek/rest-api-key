@@ -7,8 +7,9 @@ Version: 1.0
 Author: Grygorii Shevchenko
 */
 
-
-namespace RestApiKey;
+require_once __DIR__ . '/vendor/autoload.php';
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../../');
+$dotenv->load();
 
 /**
  * Disables public access to the WordPress /wp/v2/users/* api routes.
@@ -20,12 +21,12 @@ namespace RestApiKey;
  *
  * @return array
  */
-function check_key(array $result, \WP_REST_Server $server, \WP_Rest_Request $request): array
+function check_key(array $result, \WP_REST_Server $server, \WP_Rest_Request $request)
 {
 
-  if ($request->get_header('x-api-key') != $_ENV['API_KEY']) {
+  if ($request->get_header('api-key') != $_ENV['API_KEY']) {
     return [
-      'succes'  => false,
+      'success'  => false,
       'message' => __('Permission denied'),
     ];
   }
@@ -33,4 +34,4 @@ function check_key(array $result, \WP_REST_Server $server, \WP_Rest_Request $req
   return $result;
 }
 
-add_filter('rest_pre_echo_response', 'RestApiKey\check_key', 10, 3);
+add_filter('rest_pre_echo_response', 'check_key', 10, 3);
